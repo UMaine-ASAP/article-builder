@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      canvas {
+        border: 2px solid #9C9898;
+      }
+
+      h3 {
+        text-align: center;
+        margin: 5px;
+      }
+    </style>
+    <script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.3.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js"></script>
+
+
+    <script type="text/javascript" src="js/class.js"></script>
+
+    <script>
+
+    // Creates the Kinetic Stage
+    $(document).ready(function() {
+      var Kinetic =  new KineticWrapper('container', 1024, 768);
+
+      // Once a database is implemented, this will be in a 'for' loop and look like:
+      // Kinetic.addContent(xPos, yStepper, 'Content ID in the Database')
+      // The yStepper is to increment the content down the page
+      Kinetic.addContent(20,64,0);
+      Kinetic.addContent(20,128,1);
+      Kinetic.addContent(20,192,2);
+      Kinetic.addContent(20,256,3);
+      Kinetic.addContent(20,320,2);
+
+      // Sets the last clicked object as "active" and "deactivates" the others
+      Kinetic.getLayer().on('click', function(evt){
+        var objectSelected = evt.shape;
+        Kinetic.makeActive(objectSelected);
+        Kinetic.chooseProperties(Kinetic.stage, objectSelected);
+        });
+
+      // On Drag Start, the selected Object move to the top of the layer
+      Kinetic.getLayer().on('dragstart', function(evt){
+        var objectSelected = evt.shape;
+        objectSelected.moveToTop();
+        Kinetic.makeActive(objectSelected);
+        Kinetic.chooseProperties(Kinetic.stage, objectSelected);
+        });
+
+      // Implements drag functionality.  Could use some work to make it more precise
+      Kinetic.getLayer().on('dragend', function(evt) {
+          var shape = evt.shape;
+            var x = shape.getX();
+            var y = shape.getY();
+
+            shape.setX(64 * Math.round(x/64));
+            shape.setY(64 * Math.round(y/64));
+            Kinetic.stage.draw();
+        });
+    });
+
+    </script>
+  </head>
+
+  <body>
+    <h1 style="margin-left: 320px;"> Maine Journal Article Builder </h1>
+     <div id="container" style="display:inline;float:left;"></div>
+     <div id="data_container" style="display:inline;float:left;margin-left:15px;background-color:lightgrey;width:130px;height:200px;"><h3>Properties</h3></div>
+
+  </html>
